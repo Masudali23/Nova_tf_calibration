@@ -592,7 +592,7 @@ We welcome contributions! This project was built through trial-and-error and com
 
 This project builds on excellent open-source work:
 
-- **[Multi_LiCa](https://github.com/XbotGroup/Multi_LiCa)** by XbotGroup - Multi-LiDAR calibration framework
+- **[Multi_LiCa](https://github.com/TUMFTM/Multi_LiCa)** by XbotGroup - Multi-LiDAR calibration framework
 - **[TEASER++](https://github.com/MIT-SPARK/TEASER-plusplus)** by MIT SPARK Lab - Fast and robust registration
 - **[Open3D](http://www.open3d.org/)** - Modern 3D data processing library
 - **ROS 2 Community** - Robotics middleware and tools
