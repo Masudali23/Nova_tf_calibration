@@ -1,0 +1,45 @@
+# PCD Recording Configuration
+# Configure your LiDAR topics and recording parameters
+
+recording:
+  # Output directory for saved PCD files
+  output_directory: "~/calibration_data/"
+  
+  # Number of frames to record per LiDAR
+  frames_per_lidar: 10
+  
+  # Timeout in seconds (stop if not all frames received)
+  timeout_seconds: 30
+  
+  # LiDAR configurations - ADD YOUR LIDARS HERE
+  lidars:
+    - name: "front"
+      topic: "/pointcloud_front"
+      frame_id: "lidar_front"
+      enabled: true
+      
+    - name: "back"
+      topic: "/pointcloud_back"
+      frame_id: "lidar_back"
+      enabled: true
+      
+    # Example: Add more LiDARs as needed
+    # - name: "left"
+    #   topic: "/pointcloud_left"
+    #   frame_id: "lidar_left"
+    #   enabled: true
+    #
+    # - name: "right"
+    #   topic: "/pointcloud_right"
+    #   frame_id: "lidar_right"
+    #   enabled: true
+
+  # Point cloud filtering parameters
+  filtering:
+    min_range: 0.2      # Minimum distance in meters
+    max_range: 25.0     # Maximum distance in meters
+    min_points: 100     # Minimum points required to save frame
+    
+  # Voxel downsampling (set to 0 to disable)
+  # Larger values = faster processing but less detail
+  voxel_size: 0.0       # 0 = no downsampling, 0.05 = 5cm voxels

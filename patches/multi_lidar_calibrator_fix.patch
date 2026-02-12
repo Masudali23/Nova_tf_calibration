@@ -1,0 +1,66 @@
+diff --git a/multi_lidar_calibrator/multi_lidar_calibrator.py b/multi_lidar_calibrator/multi_lidar_calibrator.py
+index 1234567..abcdefg 100644
+--- a/multi_lidar_calibrator/multi_lidar_calibrator.py
++++ b/multi_lidar_calibrator/multi_lidar_calibrator.py
+@@ -63,14 +63,22 @@ class MultiLidarCalibrator(Node):
+         self.runs_count = self.declare_parameter("runs_count", 1).value
+         self.crop_cloud = self.declare_parameter("crop_cloud", 25).value
+ 
+-        self.output_dir = (
+-            os.path.dirname(os.path.realpath(__file__))
+-            + self.declare_parameter("output_dir", "/../output/").value
+-        )
++        # Handle output directory (absolute or relative)
++        output_dir_param = self.declare_parameter("output_dir", "/../output/").value
++        if os.path.isabs(output_dir_param):
++            self.output_dir = output_dir_param
++        else:
++            self.output_dir = os.path.dirname(os.path.realpath(__file__)) + output_dir_param
++        
+         if not os.path.exists(self.output_dir):
+             os.makedirs(self.output_dir)
+-        self.pcd_in_dir = (
+-            os.path.dirname(os.path.realpath(__file__))
+-            + self.declare_parameter("pcd_directory", "/../data/demo/").value
+-        )
++        
++        # Handle PCD directory (absolute or relative)
++        pcd_dir_param = self.declare_parameter("pcd_directory", "/../data/demo/").value
++        if os.path.isabs(pcd_dir_param):
++            self.pcd_in_dir = pcd_dir_param
++        else:
++            self.pcd_in_dir = os.path.dirname(os.path.realpath(__file__)) + pcd_dir_param
+ 
+         self.rel_fitness = self.declare_parameter("rel_fitness", 1e-7).value
+         self.rel_rmse = self.declare_parameter("rel_rmse", 1e-7).value
+@@ -97,11 +105,18 @@ class MultiLidarCalibrator(Node):
+ 
+         # read all the data from files (without ROS)
+         if self.read_pcds_from_file and self.read_tf_from_table:
+-            # get LiDAR names as subdirectory names
+-            lidar_list = [
+-                os.path.splitext(os.path.basename(path))[0]
+-                for path in glob.glob(self.pcd_in_dir + "*")
+-            ]
++            # Extract unique lidar prefixes from PCD filenames
++            all_pcd_files = glob.glob(self.pcd_in_dir + "*.pcd")
++            lidar_list = list(set([
++                os.path.basename(f).split('_')[0]
++                for f in all_pcd_files
++                if f.endswith('.pcd')
++            ]))
++            
++            # Debug logging
++            self.get_logger().info(f"PCD directory: {self.pcd_in_dir}")
++            self.get_logger().info(f"Detected lidars: {lidar_list}")
++            
+             pcd_paths = dict(zip(lidar_list, [None] * len(lidar_list)))
+             for lidar in lidar_list:
+                 self.declare_parameter(lidar, [0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
+-                pcd_paths[lidar] = glob.glob(self.pcd_in_dir + lidar + "*")
++                pcd_paths[lidar] = sorted(glob.glob(self.pcd_in_dir + lidar + "_*.pcd"))
++                self.get_logger().info(f"Found {len(pcd_paths[lidar])} files for {lidar}")
++                
+             self.lidar_dict = dict(
+                 zip(
+                     lidar_list,

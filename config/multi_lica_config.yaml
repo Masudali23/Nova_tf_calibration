@@ -1,0 +1,122 @@
+/**:
+  ros__parameters:
+    # ============================================
+    # DATA SOURCE CONFIGURATION
+    # ============================================
+    
+    # Number of frames to use per LiDAR
+    frame_count: 10
+    
+    # Number of calibration runs
+    runs_count: 1
+    
+    # Read from PCD files (true) or live ROS topics (false)
+    read_pcds_from_file: true
+    
+    # Directory containing PCD files (use absolute path)
+    pcd_directory: "/home/YOUR_USERNAME/calibration_data/"
+    
+    # ============================================
+    # ROS TOPIC CONFIGURATION (if reading live)
+    # ============================================
+    
+    lidar_topics: [/pointcloud_front, /pointcloud_back]
+    tf_topic: /tf_static
+    
+    # ============================================
+    # INITIAL TRANSFORMATION ESTIMATES
+    # ============================================
+    
+    # Read initial transforms from parameter table (true) or from /tf (false)
+    read_tf_from_table: true
+    
+    # Use degrees (true) or radians (false) for rotation angles
+    table_degrees: false
+    
+    # Initial transformation estimates: [x, y, z, roll, pitch, yaw]
+    # These are rough guesses - calibration will refine them
+    # Format: [x_meters, y_meters, z_meters, roll_rad, pitch_rad, yaw_rad]
+    front: [0.31, 0.0, 0.22, 0.0, 0.0, 0.0]
+    back: [-0.26, 0.0, 0.22, 0.0, 0.0, 0.0]
+    
+    # ============================================
+    # CALIBRATION SETTINGS
+    # ============================================
+    
+    # Reference frame for calibration
+    target_frame_id: front
+    
+    # Base frame of the robot
+    base_frame_id: base_link
+    
+    # Calibrate target LiDAR to base frame
+    calibrate_target: false
+    
+    # Perform calibration relative to base frame
+    calibrate_to_base: false
+    
+    # ============================================
+    # OUTPUT CONFIGURATION
+    # ============================================
+    
+    # Output directory for results (use absolute path)
+    output_dir: "/home/YOUR_USERNAME/calibration_output/"
+    
+    # Enable visualization windows (requires display)
+    visualize: false
+    
+    # ============================================
+    # ALGORITHM PARAMETERS
+    # ============================================
+    
+    # Use fitness-based calibration (more robust for multiple LiDARs)
+    use_fitness_based_calibration: true
+    
+    # Maximum correspondence distance for ICP (meters)
+    max_corresp_dist: 0.5
+    
+    # Relative fitness threshold for convergence
+    rel_fitness: 0.0000001
+    
+    # Relative RMSE threshold for convergence
+    rel_rmse: 0.0000001
+    
+    # Maximum ICP iterations
+    max_iterations: 100
+    
+    # Transformation epsilon for convergence
+    epsilon: 0.005
+    
+    # Voxel size for downsampling (meters)
+    voxel_size: 0.05
+    
+    # Remove ground plane before calibration
+    remove_ground_flag: false
+    
+    # Fitness score threshold (calibration fails if below this)
+    fitness_score_threshold: 0.15
+    
+    # ============================================
+    # RANSAC PARAMETERS
+    # ============================================
+    
+    # Distance threshold for RANSAC inliers (meters)
+    distance_threshold: 0.1
+    
+    # Number of points to sample for RANSAC
+    ransac_n: 10
+    
+    # Number of RANSAC iterations
+    num_iterations: 2000
+    
+    # Voxel size for RANSAC downsampling
+    r_voxel_size: 0.1
+    
+    # Number of RANSAC runs
+    r_runs: 10
+    
+    # Height of base_link above ground (meters)
+    base_to_ground_z: 0.22
+    
+    # Crop cloud distance (not used if 0)
+    crop_cloud: 0
